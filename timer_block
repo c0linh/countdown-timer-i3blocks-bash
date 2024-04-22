@@ -1,0 +1,7 @@
+[timer]
+interval=1
+markup=pango
+command=timer-i3block.sh
+color=#FF0000
+label_color=#00FF00
+warn_color=#0000FF
