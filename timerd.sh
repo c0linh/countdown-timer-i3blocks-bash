@@ -8,11 +8,12 @@ Timer Daemon Script
 This daemon interfaces with timer.sh, reading commands from stdin and outputting to stdout. It supports all commands of timer.sh, plus a daemon-stop command through stdin.
 
 Usage:
-timer-daemon.sh [tick]
+timer-daemon.sh -h [tick]
+
+- h, --help Display this help message and exit.
 
 Parameters:
 - tick: Defines the update interval in seconds, controlling the frequency of output updates. Valid range: 0.01 to 10 seconds, with up to two decimal places of precision. Recommended 1 for updates every second. Note: Real-time updates are not guaranteed. Default is 1.
-- daemon-start [tick]: Activates the daemon, processing commands from stdin and outputting to stdout continuously. If provided, time and action start the timer immediately.
 - daemon-stop [wait]: Shuts down the daemon. A wait value of 1 delays stopping until the current timer ends. This command must be sent through stdin.
 
 Output: Displays [time] [seconds] [state] with time in HH:MM:SS format.

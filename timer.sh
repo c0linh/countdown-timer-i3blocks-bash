@@ -8,7 +8,7 @@ Countdown Timer (Bash Script)
 A countdown timer script in pure bash, managing a state file without daemon capabilities. Users must invoke the script periodically.
 
 Usage:
-timer.sh {-h, --help} {set [time] [action] | start [time] | pause | stop | get-state} 
+timer.sh [-h, --help] {set [time] [action] | start [time] | pause | stop | get-state} 
 
 -h, --help Display this help message and exit.
 

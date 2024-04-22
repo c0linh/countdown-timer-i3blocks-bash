@@ -1,3 +1,20 @@
+- [Countdown Timer for Bash and i3blocks](#countdown-timer-for-bash-and-i3blocks)
+	- [Usage](#usage)
+		- [timer.sh](#timersh)
+			- [Features:](#features)
+			- [Usage:](#usage-1)
+		- [timer-functions.sh](#timer-functionssh)
+		- [timerd.sh](#timerdsh)
+			- [Features:](#features-1)
+			- [Usage:](#usage-2)
+		- [timer-i3block.sh](#timer-i3blocksh)
+			- [Features:](#features-2)
+			- [Configuration:](#configuration)
+			- [Help and Documentation](#help-and-documentation)
+	- [Attribution](#attribution)
+	- [Contributing](#contributing)
+	- [License](#license)
+
 Countdown Timer for Bash and i3blocks
 =====================================
 This project provides a set of tools to manage countdown timers within a bash environment and integrates seamlessly with the i3 window manager through i3blocks. It consists of three main components:
@@ -5,7 +22,7 @@ This project provides a set of tools to manage countdown timers within a bash en
 - timer.sh: A countdown timer script written in pure bash.
 - timerd.sh: A daemon script that complements timer.sh by adding daemon capabilities.
 - timer-i3block.sh: Allows the timer to be controlled and displayed within [i3blocks](https://github.com/vivien/i3blocks?tab=readme-ov-file#example).
-- timer-functions.sh: Contains fuctions and declares global parameters for timer.sh
+- timer-functions.sh: Contains functions and declares global parameters for timer.sh
 
 Installation
 Clone this repository to your local machine using:
@@ -27,7 +44,7 @@ A simple, bash-based countdown timer that manages its state through files withou
 #### Usage:
 
 ```
-	timer.sh { set [time] [action] | start [time] | pause | stop | get-state }
+timer.sh [-h, --help] { set [time] [action] | start [time] | pause | stop | get-state }
 ```
 For detailed command descriptions and parameters, see Timer Script Help.
 
@@ -49,7 +66,7 @@ A daemon that interfaces with timer.sh, allowing commands to be read from stdin 
 #### Usage:
 
 ```
-timerd.sh [tick]
+timerd.sh [-h, --help] [tick]
 ```
 For detailed command descriptions and parameters, see Daemon Script Help.
 
@@ -68,6 +85,10 @@ For detailed information on setup and error handling, see i3blocks Integration H
 
 #### Help and Documentation
 For detailed help on each script, including parameters, commands, and error codes, refer to the following sections:
+
+Attribution
+-----------
+Inspired by https://github.com/claudiodangelis/timer. This is a bash alternative without the need for a Go runtime.
 
 Contributing
 ------------
