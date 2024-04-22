@@ -22,7 +22,7 @@ This project provides a set of tools to manage countdown timers within a bash en
 - timer.sh: A countdown timer script written in pure bash.
 - timerd.sh: A daemon script that complements timer.sh by adding daemon capabilities.
 - timer-i3block.sh: Allows the timer to be controlled and displayed within [i3blocks](https://github.com/vivien/i3blocks?tab=readme-ov-file#example).
-- timer-functions.sh: Contains functions and declares global parameters for timer.sh
+- timer-functions.sh: Contains functions and declares global parameters required by timer.sh
 
 Installation
 Clone this repository to your local machine using:
@@ -68,7 +68,7 @@ A daemon that interfaces with timer.sh, allowing commands to be read from stdin 
 ```
 timerd.sh [-h, --help] [tick]
 ```
-For detailed command descriptions and parameters, see Daemon Script Help.
+For detailed command descriptions and parameters, see .
 
 ### timer-i3block.sh
 
