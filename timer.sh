@@ -8,12 +8,11 @@ Countdown Timer (Bash Script)
 A countdown timer script in pure bash, managing a state file without daemon capabilities. Users must invoke the script periodically.
 
 Usage:
-timer.sh [-h, --help] {set [time] [action] | start [time] | pause | stop | get-state} 
+timer.sh [-h, --help] {set [time] [action] | start [time] | pause | update | stop | get-state} 
 
 -h, --help Display this help message and exit.
 
-A call without arguments returns the updated current status. Every invocation 
-returns a status line.
+Every invocation returns a status line. A call without arguments or 'update' returns only the status line. 
 
 Commands:
 start [time] [action]: Initiates the timer. No effect if already running/ paused. Time and action are optional, resetting after completion. Example: timer.sh start 3:00 "notify-send 'Time's up!' 'chop chop...'"
@@ -41,7 +40,9 @@ States:
 - finished: Timer completed, action executed. For long actions, use "stop" to	terminate.
 
 Concurrency & Instances:
-Does not support concurrent calls. Utilizes .timer.lock for a simple lock mechanism. Different instances can run concurrently with separate TIMER_CONFIG_DIR configurations.
+Different instances can run concurrently with separate TIMER_CONFIG_DIR configurations.
+
+Does not support concurrent calls. Utilizes $TIMER_CONFIG_DIR.timer.lock stored in /tmp (normally a tmpfs).
 
 Configuration & Files:
 TIMER_CONFIG_DIR: Storage for all files. Defaults to XDG_CONFIG_DIR or HOME. Created if non-existent.
@@ -112,7 +113,8 @@ function set_time_and_action_args() {
 	declare -ri set_default="${1:0}"
 
 	if ! is_state_in "finished stopped"; then
-		echo "set can only be called in finished or stopped state" >/dev/stderr
+		echo "set has no effect while running or paused" >&2
+		return
 	fi
 
 	if is_time_valid "${2:-}"; then
@@ -135,6 +137,7 @@ function set_time_and_action_args() {
 
 function execute_finish_action() {
 	if [ -n "$current_action" ]; then
+		echo "action is: $current_action" >&2
 		$current_action &
 		[ -n "$!" ] && action_pid=$!
 	elif [ -x "$ACTION_FILE" ]; then
@@ -162,7 +165,7 @@ function kill_finish_action() {
 	fi
 
 	if is_action_running; then
-		echo "unable to terminate action (pid: $action_pid)" >/dev/stderr
+		echo "unable to terminate action (pid: $action_pid)" >&2
 	fi
 
 	action_pid=0
@@ -203,8 +206,8 @@ update_timer() {
 		#action_pid - keep in case we need to kill it
 		;;
 	*)
-		echo "unkonwn state: $state" >/dev/stderr
-		echo "no actions specified" >/dev/stderr
+		echo "unkonwn state: $state" >&2
+		echo "no actions specified" >&2
 		exit 101
 		;;
 	esac
@@ -256,24 +259,16 @@ timer_stop() {
 }
 
 timer_command() {
-	load_state
-	declare -r command=${1:-""}
-	[ -n "$command" ] && shift
-
-	#no command and the timer is stopped
-	#no need to aquire lock.
-	if [ "$state" == "stopped" ] && [ "$command" == '' ]; then
-		print_state
-		exit 0
-	fi
-
 	aquire_lock
+	load_state
 
 	if [ "$state" != "stopped" ]; then
-		# if in a "active" state update state: in case the running timer finished
-		# or another state change occured since last call.
+		# state is "active", update...
 		timer_eval_state
 	fi
+
+	command=${1:-'update'}
+	(($#)) && shift
 
 	case $command in
 	start)
@@ -285,7 +280,6 @@ timer_command() {
 		;;
 	stop)
 		timer_stop
-
 		;;
 	set)
 		set_time_and_action_args "1" "$@"
@@ -293,13 +287,13 @@ timer_command() {
 	get-state)
 		get_state
 		;;
-	'')
+	update)
 		#noop - update takes place at beginning of function
 		;;
 	*)
 		print_help
 		echo
-		echo "$command is not a valid command" >/dev/stderr
+		echo "$command is not a valid command" >&2
 		exit 1
 		;;
 	esac
@@ -309,4 +303,22 @@ timer_command() {
 	release_lock
 }
 
-timer_command "${@}"
+# do we need a write lock?
+function do_noop_print_status() {
+	if [ -n "${1}" ] && { [ "$1" == "noop" ] || [ "$1" == "stop" ]; }; then
+		load_state
+		if [ "$state" == "stopped" ]; then
+			print_state
+			return 0
+		fi
+	fi
+	return 1
+}
+
+if ! do_noop_print_status "${1:-'noop'}"; then
+	if ! timer_command "${@}"; then
+		load_state
+		print_state
+		exit $?
+	fi
+fi
