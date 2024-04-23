@@ -2,7 +2,7 @@
 set -o errexit -o pipefail -o noclobber -o nounset
 
 function show_help() {
-cat <<EOH
+	cat <<EOH
 Countdown Timer (Bash Script)
 
 A countdown timer script in pure bash, managing a state file without daemon capabilities. Users must invoke the script periodically.
@@ -27,7 +27,7 @@ Parameters:
 - time: Format: HH:MM:SS or seconds. Must include at least one non-zero value.
   Examples: "60:00", "1:0:0", "3600", "59:60" (all equal 1 hour).
   
--	action: Command executed at zero. Stored differently based on invocation:
+- action: Command executed at zero. Stored differently based on invocation:
   Via start: Escaped, stored in .timer.state (basic escaping).
   Via set: As bash script in .timer.action (full support, no escaping issues).
   
@@ -62,7 +62,7 @@ Inspired by https://github.com/claudiodangelis/timer. A simpler bash alternative
 EOH
 }
 
-# Parsing command-line options
+# Parsing help options
 while getopts ":h-" option; do
 	case "${option}" in
 	h)
@@ -95,9 +95,8 @@ while getopts ":h-" option; do
 done
 shift $((OPTIND - 1))
 
-# Contains basic funtions and declares global parameters shared with and
-# REQUIRED by this script! If desired inline the hole file and delete the
-# source.
+# Contains basic funcions and declares global parameters shared with and
+# REQUIRED by this script!
 # shellcheck disable=SC1091
 source timer-functions.sh
 
@@ -175,7 +174,7 @@ function print_state() {
 
 # Updates timer releated variables based on the current time:
 # - time_left - time left in seconds
-# - mtime	    - last updated time in unix epoc seconds
+# - mtime     - last updated time in unix epoc seconds
 # - end_time	- endtime in unix epoc seconds
 update_timer() {
 	declare -ri now="$(date -u +%s)"
@@ -187,22 +186,19 @@ update_timer() {
 			end_time=$((now + time_left))
 		fi
 
-		# set time left
 		time_left=$((end_time - now))
 		mtime="$now"
 		;;
 	paused)
-		# set new end_time
 		end_time+=$((now - mtime))
 		mtime="$now"
 		;;
 	finished | stopped)
-		#reset_values
+		#reset values
 		time_left=$default_time
 		end_time="0"
 		mtime="0"
-		#use action-file current-action is only used when a action is specified via
-		#"start time action"
+		#only used when a action is specified via "start time action"
 		current_action=""
 		#action_pid - keep in case we need to kill it
 		;;
@@ -236,19 +232,16 @@ timer_eval_state() {
 }
 
 timer_start() {
-	if is_state_in "stopped finished"; then
+	if [ "$state" != "running" ]; then
 		state="running"
-		update_timer # set new end-time
-	elif [ "$state" == "paused" ]; then
-		state="running"
-		update_timer #update time-left
+		update_timer
 	fi
 }
 
 timer_pause() {
 	if [ "$state" == "running" ]; then
 		state="paused"
-		update_timer #update end time
+		update_timer
 	fi
 }
 
@@ -258,7 +251,7 @@ timer_stop() {
 	fi
 	if [ "$state" != "stopped" ]; then
 		state="stopped"
-		update_timer #reset variables
+		update_timer
 	fi
 }
 
@@ -267,8 +260,8 @@ timer_command() {
 	load_state
 
 	if [ "$state" != "stopped" ]; then
-		#Use update state: in case the running timer finished or another state
-		#change occured since last call.
+		# if in a "active" state update state: in case the running timer finished
+		# or another state change occured since last call.
 		timer_eval_state
 	fi
 
@@ -293,9 +286,7 @@ timer_command() {
 		get_state
 		;;
 	'')
-		#timer_eval_state #update - allow 4 two state changes per call
-		#example: initial timer_eval_state at beginning of method
-		# sets updates state from running - finish
+		#noop - update takes place at beginning of function
 		;;
 	*)
 		print_help
