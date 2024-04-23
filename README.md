@@ -1,15 +1,15 @@
 - [Countdown Timer for Bash and i3blocks](#countdown-timer-for-bash-and-i3blocks)
 	- [Usage](#usage)
 		- [timer.sh](#timersh)
-			- [Features:](#features)
-			- [Usage:](#usage-1)
+			- [Features](#features)
+			- [Usage](#usage-1)
 		- [timer-functions.sh](#timer-functionssh)
 		- [timerd.sh](#timerdsh)
-			- [Features:](#features-1)
-			- [Usage:](#usage-2)
+			- [Features](#features-1)
+			- [Usage](#usage-2)
 		- [timer-i3block.sh](#timer-i3blocksh)
-			- [Features:](#features-2)
-			- [Configuration:](#configuration)
+			- [Features](#features-2)
+			- [Configuration](#configuration)
 			- [Help and Documentation](#help-and-documentation)
 	- [Attribution](#attribution)
 	- [Contributing](#contributing)
@@ -46,7 +46,7 @@ A simple, bash-based countdown timer that manages its state through files withou
 ```
 timer.sh [-h, --help] { set [time] [action] | start [time] | pause | stop | get-state }
 ```
-For detailed command descriptions and parameters, see Timer Script Help.
+For detailed command descriptions and parameters, see [timer.sh](timer.sh).
 
 ### timer-functions.sh
 - config and runtime variable definition
@@ -68,7 +68,7 @@ A daemon that interfaces with timer.sh, allowing commands to be read from stdin 
 ```
 timerd.sh [-h, --help] [tick]
 ```
-For detailed command descriptions and parameters, see .
+For detailed command descriptions and parameters, see [timerd.sh](timerd.sh).
 
 ### timer-i3block.sh
 
@@ -81,10 +81,10 @@ Integrates the timer with i3blocks, offering an interactive display and control 
 #### Configuration
 Ensure to set the necessary environment variables (BLOCK_NAME, interval=1, markup=pango) in your i3blocks configuration for the script to function properly.
 
-For detailed information on setup and error handling, see i3blocks Integration Help.
+For detailed information on setup and error handling, see [i3blocks](timer-i3block.sh) Integration Help.
 
 #### Help and Documentation
-For detailed help on each script, including parameters, commands, and error codes, refer to the following sections:
+For detailed help on each script, including parameters, commands, and error codes, consult the show_help method of each Script.
 
 Attribution
 -----------
