@@ -17,7 +17,7 @@
 
 Countdown Timer for Bash and i3blocks
 =====================================
-This project provides a set of tools to manage countdown timers within a bash environment and integrates seamlessly with the i3 window manager through i3blocks. It consists of three main components:
+This project provides a set of tools to manage countdown timers within a bash environment and integrates seamlessly with the i3 window manager through i3blocks. It consists of three main components and a function script:
 
 - timer.sh: A countdown timer script written in pure bash.
 - timerd.sh: A daemon script that complements timer.sh by adding daemon capabilities.
