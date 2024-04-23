@@ -37,11 +37,11 @@ Usage
 ### timer.sh
 A simple, bash-based countdown timer that manages its state through files without requiring daemon capabilities.
 
-#### Features:
+#### Features
 - Start, pause, stop, and set timer commands.
 - Customizable action upon countdown completion.
 
-#### Usage:
+#### Usage
 
 ```
 timer.sh [-h, --help] { set [time] [action] | start [time] | pause | stop | get-state }
@@ -63,7 +63,7 @@ A daemon that interfaces with timer.sh, allowing commands to be read from stdin 
 - All timer.sh commands plus daemon-stop command.
 - Customizable tick rate for update frequency.
 
-#### Usage:
+#### Usage
 
 ```
 timerd.sh [-h, --help] [tick]
@@ -74,11 +74,11 @@ For detailed command descriptions and parameters, see .
 
 Integrates the timer with i3blocks, offering an interactive display and control mechanism directly within the i3bar.
 
-#### Features:
+#### Features
 - Displays the timer state with Nerd Fonts icons.
 - Controls the timer via mouse clicks and scroll actions.
 
-#### Configuration:
+#### Configuration
 Ensure to set the necessary environment variables (BLOCK_NAME, interval=1, markup=pango) in your i3blocks configuration for the script to function properly.
 
 For detailed information on setup and error handling, see i3blocks Integration Help.
