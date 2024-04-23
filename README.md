@@ -88,7 +88,7 @@ For detailed help on each script, including parameters, commands, and error code
 
 Attribution
 -----------
-Inspired by https://github.com/claudiodangelis/timer. This is a bash alternative without the need for a Go runtime.
+Inspired by [https://github.com/claudiodangelis/i3-timer]. This is a bash alternative without the need for a Go runtime.
 
 Contributing
 ------------
