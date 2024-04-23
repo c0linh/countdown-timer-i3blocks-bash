@@ -81,7 +81,7 @@ Integrates the timer with i3blocks, offering an interactive display and control 
 #### Configuration
 Ensure to set the necessary environment variables (BLOCK_NAME, interval=1, markup=pango) in your i3blocks configuration for the script to function properly.
 
-For detailed information on setup and error handling, see [i3blocks](timer-i3block.sh) Integration Help.
+For detailed information on setup and error handling, see [i3blocks](timer-i3block.sh).
 
 #### Help and Documentation
 For detailed help on each script, including parameters, commands, and error codes, consult the show_help method of each Script.
