@@ -3,7 +3,7 @@
 set -o errexit -o pipefail -o noclobber -o nounset
 
 # Contains basic funtions and declares global parameters shared with and
-# REQUIRED by this timer.sh 
+# REQUIRED by this timer.sh
 # - config-file save and load
 # - aquire and realease lockfile
 # - time related function using "date" (parse, convert, format)
@@ -14,7 +14,6 @@ if ! [ -d "${TIMER_CONFIG_DIR:=$DEFAULT_CONFIG_DIR}" ]; then
 fi
 
 declare -r LOCK_FILE="${TIMER_CONFIG_DIR}/.timer.lock"
-trap "{ rm -f $LOCK_FILE; }" INT TERM EXIT
 
 declare -r STATE_FILE="${TIMER_CONFIG_DIR}/.timer.state"
 declare -r ACTION_FILE="${TIMER_CONFIG_DIR}/.timer.action"
@@ -101,6 +100,7 @@ function aquire_lock() {
 		exit 99
 	fi
 	touch "$LOCK_FILE"
+	trap "{ rm -f $LOCK_FILE; }" INT TERM EXIT
 }
 
 function release_lock() {

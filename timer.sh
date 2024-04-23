@@ -256,17 +256,24 @@ timer_stop() {
 }
 
 timer_command() {
-	aquire_lock
 	load_state
+	declare -r command=${1:-""}
+	[ -n "$command" ] && shift
+
+	#no command and the timer is stopped
+	#no need to aquire lock.
+	if [ "$state" == "stopped" ] && [ "$command" == '' ]; then
+		print_state
+		exit 0
+	fi
+
+	aquire_lock
 
 	if [ "$state" != "stopped" ]; then
 		# if in a "active" state update state: in case the running timer finished
 		# or another state change occured since last call.
 		timer_eval_state
 	fi
-
-	declare -r command=${1:-""}
-	[ -n "$command" ] && shift
 
 	case $command in
 	start)
@@ -278,6 +285,7 @@ timer_command() {
 		;;
 	stop)
 		timer_stop
+
 		;;
 	set)
 		set_time_and_action_args "1" "$@"
